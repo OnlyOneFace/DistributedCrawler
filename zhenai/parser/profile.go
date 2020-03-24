@@ -12,16 +12,16 @@ import (
 * @Author:
 * @Date: 2020/3/23 16:10
  */
-var (
-	ageRe    = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">([\d]+)岁</div>`)
-	heightRe = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">([\d]+)cm</div>`)
-	weightRe = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">([\d]+)kg</div>`)
-	incomeRe = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">月收入:([^<]+)</div>`)
-	HokouRe  = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn pink">籍贯:([^<]+)</div>`)
-	xinzuoRe = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">([^(]+).+\)</div>`)
-)
 
-func ParseProfile(contents []byte, name string) *engine.ParseResult {
+func ParseProfile(contents []byte, name string, out chan *engine.Response) {
+	var (
+		ageRe    = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">([\d]+)岁</div>`)
+		heightRe = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">([\d]+)cm</div>`)
+		weightRe = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">([\d]+)kg</div>`)
+		incomeRe = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">月收入:([^<]+)</div>`)
+		HokouRe  = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn pink">籍贯:([^<]+)</div>`)
+		xinzuoRe = regexp.MustCompile(`<div data-v-8b1eac0c="" class="m-btn purple">([^(]+).+\)</div>`)
+	)
 	profile := &model.Profile{}
 	// 姓名
 	profile.Name = name
@@ -40,7 +40,9 @@ func ParseProfile(contents []byte, name string) *engine.ParseResult {
 	profile.Hokou = extractString(contents, HokouRe)
 	// 星座
 	profile.Xinzuo = extractString(contents, xinzuoRe)
-	return &engine.ParseResult{Items: []interface{}{profile}}
+	out <- &engine.Response{
+		Items: profile,
+	}
 }
 
 func extractString(contents []byte, re *regexp.Regexp) string {
