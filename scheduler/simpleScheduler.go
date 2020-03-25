@@ -14,8 +14,8 @@ type SimpleScheduler struct {
 	workerChan chan *engine.Request // 请求队列
 }
 
-func (s *SimpleScheduler) ConfigureMasterWorkerChan(in chan *engine.Request) {
-	s.workerChan = in
+func (s *SimpleScheduler) ConfigureMasterWorkerChan(cap int) {
+	s.workerChan = make(chan *engine.Request, cap) // 请求队列
 }
 
 func (s *SimpleScheduler) Submit(r *engine.Request) {
@@ -24,4 +24,8 @@ func (s *SimpleScheduler) Submit(r *engine.Request) {
 			s.workerChan <- r
 		}
 	}()
+}
+
+func (s *SimpleScheduler) TaskChan() chan *engine.Request {
+	return s.workerChan
 }

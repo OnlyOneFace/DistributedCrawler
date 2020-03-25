@@ -2,6 +2,7 @@ package main
 
 import (
 	"DistributedCrawler/engine"
+	"DistributedCrawler/persist"
 	"DistributedCrawler/scheduler"
 	"DistributedCrawler/zhenai/parser"
 )
@@ -15,8 +16,10 @@ const seed = "http://www.zhenai.com/zhenghun"
 
 func main() {
 	e := &engine.CurEngine{
-		Scheduler:   &scheduler.SimpleScheduler{},
-		WorkerCount: 100,
+		Scheduler:     &scheduler.SimpleScheduler{},
+		WorkerCount:   100,
+		ItemChan:      persist.ItemSaver(),
+		IsDuplication: make(map[string]bool),
 	}
 	e.Run(&engine.Request{
 		Url:       seed,

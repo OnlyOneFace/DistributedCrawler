@@ -8,5 +8,6 @@ package engine
 // 任务队列调度器接口
 type AllScheduler interface {
 	Submit(*Request)
-	ConfigureMasterWorkerChan(chan *Request)
+	ConfigureMasterWorkerChan(int)
+	TaskChan() chan *Request
 }

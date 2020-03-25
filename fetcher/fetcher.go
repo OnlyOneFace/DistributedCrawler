@@ -10,7 +10,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 )
 
 /*
@@ -18,13 +17,10 @@ import (
 * @Author:
 * @Date: 2020/3/23 14:54
  */
-var rateLimiter = time.NewTicker(10 * time.Millisecond)
+// var rateLimiter = time.NewTicker(10 * time.Millisecond)
 
 func Fetch(url string) ([]byte, error) {
-	<-rateLimiter.C
-	if url == "" {
-		return nil, nil
-	}
+	// <-rateLimiter.C
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
