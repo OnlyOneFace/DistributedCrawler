@@ -1,7 +1,7 @@
 package main
 
 import (
-	"DistributedCrawler/persist"
+	"fmt"
 	"log"
 	"net"
 	"net/rpc"
@@ -14,7 +14,7 @@ import (
 * @Date: 2020/3/27 0:09
  */
 func main() {
-	log.Fatalln(ServeRPC(":9999", &persist.ItemSaverService{}))
+	log.Fatalln(ServeRPC(":9999", &ItemSaverService{}))
 }
 
 func ServeRPC(host string, service interface{}) error {
@@ -31,4 +31,12 @@ func ServeRPC(host string, service interface{}) error {
 		}
 		go jsonrpc.ServeConn(conn)
 	}
+}
+
+type ItemSaverService struct {
+}
+
+func (*ItemSaverService) Save(item interface{}, result *string) error {
+	*result = fmt.Sprintf("Item Saver: got item: %v\n", item)
+	return nil
 }
