@@ -18,7 +18,7 @@ func main() {
 	e := &engine.CurEngine{
 		Scheduler:     &scheduler.SimpleScheduler{},
 		WorkerCount:   100,
-		ItemChan:      persist.ItemSaver(),
+		ItemChan:      persist.ItemSaver("localhsot:9999"),
 		IsDuplication: make(map[string]bool),
 	}
 	e.Run(&engine.Request{
