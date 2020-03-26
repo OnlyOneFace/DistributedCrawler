@@ -2,6 +2,7 @@ package persist
 
 import (
 	"DistributedCrawler/rpcSupport"
+	"fmt"
 )
 
 /*
@@ -16,13 +17,16 @@ func ItemSaver(host string) chan interface{} {
 	if err != nil {
 		panic(err)
 	}
+	var count int
 	go func() {
 		for {
 			item := <-out
 			var result string
-			if err = client.Call("ItemSaverService.Save", item, &result); err != nil {
+			if err = client.Call("ItemSaverService.Save", fmt.Sprintf("%v %v", count, item), &result); err != nil {
 				panic(err)
 			}
+			fmt.Println(result)
+			count++
 		}
 	}()
 	return out
