@@ -10,7 +10,7 @@ import (
 * @Author:
 * @Date: 2020/3/25 10:28
  */
-// 单机并发版
+// 单机并发版->分布式版
 func ItemSaver(host string) chan interface{} {
 	out := make(chan interface{}, 10)
 	client, err := rpcSupport.NewClient(host)
